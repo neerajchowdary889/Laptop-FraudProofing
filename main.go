@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 	"time"
-	"github.com/olekukonko/tablewriter"
+	"github.com/jedib0t/go-pretty/table"
 )
 
 var Hmap = make(map[string]string)
@@ -81,7 +81,7 @@ func Battery() string{
 	return serial_number
 }
 
-func HashMap(table *tablewriter.Table, key string, value string, flag string) {
+func HashMap(Table *table.Table, key string, value string, flag string) {
 
 	if flag == a{
 		Hmap[key] = value
@@ -89,9 +89,10 @@ func HashMap(table *tablewriter.Table, key string, value string, flag string) {
 		delete(Hmap, key)
 	}else if flag == P{
 		for k,v := range Hmap{
-			table.Append([]string{k, v, hashString(v)})
+			row := table.Row{k, v, hashString(v)}
+			Table.AppendRow(row)
 		}
-		table.Render()
+		Table.Render()
 	}else if flag == p{
 		for k,v := range Hmap{
 			fmt.Printf("%s ---> %s", k, v)
@@ -101,8 +102,10 @@ func HashMap(table *tablewriter.Table, key string, value string, flag string) {
 }
 
 func main(){	
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Component", "ID", "Hash"})
+
+	Table := table.NewWriter()
+	Table.SetOutputMirror(os.Stdout)
+	Table.AppendHeader(table.Row{"Component", "ID", "Hash"}) 
 
 	start := time.Now()
 	ch1 := make(chan string)
@@ -139,11 +142,11 @@ func main(){
 	battery := <- ch5
 	elapsed := time.Since(start)
 
-	HashMap(table,"Motherboard", motherboard, a)
-	HashMap(table ,"Ram", ram, a)
-	HashMap(table ,"SSD", ssd, a)
-	HashMap(table ,"UUID", uuid, a)
-	HashMap(table ,"Battery", battery, a)
+	HashMap(Table.(*table.Table),"Motherboard", motherboard, a)
+	HashMap(Table.(*table.Table) ,"Ram", ram, a)
+	HashMap(Table.(*table.Table) ,"SSD", ssd, a)
+	HashMap(Table.(*table.Table) ,"UUID", uuid, a)
+	HashMap(Table.(*table.Table) ,"Battery", battery, a)
 	fmt.Println(elapsed)
 
 	var printstatus string
@@ -151,9 +154,9 @@ func main(){
 	fmt.Scan(&printstatus)
 
 	if printstatus == "p"{
-		HashMap(table,"", "", p)
+		HashMap(Table.(*table.Table),"", "", p)
 	}else if printstatus == "P"{
-		HashMap(table,"", "", P)
+		HashMap(Table.(*table.Table),"", "", P)
 	}
 
 }

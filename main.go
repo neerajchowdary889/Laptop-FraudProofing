@@ -150,7 +150,7 @@ func main(){
 	fmt.Println(elapsed)
 
 	var printstatus string
-	fmt.Println("Enter 'p' to print the map")
+	fmt.Println(">>>Enter 'p' to print the map\n>>>Enter 'P' to print the table")
 	fmt.Scan(&printstatus)
 
 	if printstatus == "p"{

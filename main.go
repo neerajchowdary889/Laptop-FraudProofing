@@ -17,7 +17,7 @@ const(
 	a = "append"
 	d = "delete"
 	p = "print"
-	P = "print_table"
+	t = "print_table"
 )
 
 func hashString(input string) string {
@@ -87,7 +87,7 @@ func HashMap(Table *table.Table, key string, value string, flag string) {
 		Hmap[key] = value
 	}else if flag == d{
 		delete(Hmap, key)
-	}else if flag == P{
+	}else if flag == t{
 		for k,v := range Hmap{
 			row := table.Row{k, v, hashString(v)}
 			Table.AppendRow(row)
@@ -150,13 +150,13 @@ func main(){
 	fmt.Println(elapsed)
 
 	var printstatus string
-	fmt.Println(">>>Enter 'p' to print the map\n>>>Enter 'P' to print the table")
+	fmt.Println(">>>Enter 'p' to print the map\n>>>Enter 't' to print the table")
 	fmt.Scan(&printstatus)
+	printstatus = strings.ToLower(strings.TrimSpace(printstatus))
 
 	if printstatus == "p"{
 		HashMap(Table.(*table.Table),"", "", p)
-	}else if printstatus == "P"{
-		HashMap(Table.(*table.Table),"", "", P)
+	}else if printstatus == "t"{
+		HashMap(Table.(*table.Table),"", "", t)
 	}
-
 }
